@@ -16,7 +16,7 @@ import { RouterView } from 'vue-router'
 import LayoutHeader from './layout-header/layout-header.vue'
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .layout-wrapper {
   height: 100vh;
   .layout-header {

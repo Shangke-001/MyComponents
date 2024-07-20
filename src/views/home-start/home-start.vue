@@ -1,7 +1,7 @@
 <template>
-  <header>home</header>
+  <header>简介</header>
 </template>
 
 <script setup lang="ts"></script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped></style>

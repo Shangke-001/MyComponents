@@ -1,7 +1,12 @@
 <template>
   <el-aside width="250px" class="layout-aside">
     <el-scrollbar>
-      <el-menu class="home-menu-items" :router="true" :default-active="route.path">
+      <el-menu
+        class="home-menu-items"
+        :router="true"
+        :default-active="route.path"
+        style="border: 0px"
+      >
         <layout-menu :menuRoutes="routes[0].children[0].children"></layout-menu>
       </el-menu>
     </el-scrollbar>
@@ -19,7 +24,7 @@ import { routes } from '@/router//routes'
 const route = useRoute()
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .layout-wrapper {
   height: 100vh;
   .layout-header {

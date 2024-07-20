@@ -12,7 +12,7 @@ export const routes = [
       {
         path: '/components',
         name: 'mycomponents',
-        redirect: '/components/home',
+        redirect: '/components/intro',
         component: () => import('@/layout/mycomponents-index.vue'),
         meta: {
           title: '组件',
@@ -20,11 +20,11 @@ export const routes = [
         },
         children: [
           {
-            path: '/components/home',
-            name: 'home',
+            path: '/components/intro',
+            name: 'intro',
             component: () => import('@/views/home-start/home-start.vue'),
             meta: {
-              title: '首页',
+              title: '简介',
               hidden: false
             }
           },

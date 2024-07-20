@@ -23,4 +23,4 @@ const { menuRoutes } = defineProps(['menuRoutes'])
 console.log(menuRoutes)
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped></style>

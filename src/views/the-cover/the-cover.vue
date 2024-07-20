@@ -15,6 +15,8 @@
 <style lang="scss" scoped>
 .cover-wrapper {
   width: 100%;
+  height: calc(100vh - 60px);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
