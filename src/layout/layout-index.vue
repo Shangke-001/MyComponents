@@ -19,6 +19,7 @@ import LayoutHeader from './layout-header/layout-header.vue'
 <style lang="scss" scoped>
 .layout-wrapper {
   height: 100vh;
+  min-width: 1000px;
   .layout-header {
     background-color: #fff;
     border-bottom: #eee 2px solid;

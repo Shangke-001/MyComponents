@@ -11,7 +11,7 @@
       </el-menu>
     </el-scrollbar>
   </el-aside>
-  <el-main>
+  <el-main class="main">
     <RouterView />
   </el-main>
 </template>
@@ -32,6 +32,10 @@ const route = useRoute()
     border-bottom: #eee 2px solid;
   }
   .layout-aside {
+  }
+  .main {
+    height: calc(100vh - 60px);
+    overflow-y: scroll;
   }
 }
 </style>
