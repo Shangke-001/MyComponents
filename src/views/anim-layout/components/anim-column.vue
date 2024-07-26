@@ -40,7 +40,6 @@ const calculateHeight = () => {
       }
     })
   }
-  //console.log(JSON.stringify(styleList))
 }
 watch(styleList, () => {
   calculateHeight()

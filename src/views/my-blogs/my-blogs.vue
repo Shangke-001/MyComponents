@@ -19,22 +19,29 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import Markdown from 'vue3-markdown-it'
 import 'github-markdown-css'
 import md01 from '/src/assets/blogs-contents/前端学习与找实习阶段性总结.md?raw'
-//import md02 from '/src/assets/blogs-contents/test.md?raw'
-
+import md02 from '/src/assets/blogs-contents/test.md?raw'
 const markDownFileList = [
   {
     label: '前端学习与找实习阶段性总结',
     source: md01
+  },
+  {
+    label: 'test',
+    source: md02
   }
-  // {
-  //   label: 'test',
-  //   source: md02
-  // }
 ]
+const route = useRoute()
+onMounted(() => {
+  const dActive = (route.query.defaultActive as string) || '0'
+  if (dActive) {
+    changeFile(markDownFileList[parseInt(dActive)])
+  }
+})
 const mdFile = reactive({
   mdSource: markDownFileList[0].source,
   activeLabel: markDownFileList[0].label

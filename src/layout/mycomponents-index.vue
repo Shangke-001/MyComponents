@@ -28,7 +28,7 @@ const route = useRoute()
 .layout-wrapper {
   height: 100vh;
   .layout-header {
-    background-color: #fff;
+    background-color: white;
     border-bottom: #eee 2px solid;
   }
   .layout-aside {

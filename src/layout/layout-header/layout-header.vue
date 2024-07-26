@@ -2,15 +2,16 @@
   <div class="layouth-wrapper">
     <header class="header-content" @click="router.push('/')">
       <img src="/logo.jpg" width="40px" height="45px" />
-      <div>尚可の组件</div>
+      <div>尚可の个人网站</div>
     </header>
     <main class="header-main">
       <el-input
         v-model="dataInit.searchKeyword"
         style="width: 180px; margin-right: 15px"
-        placeholder="搜索"
+        placeholder="搜索（施工中..."
         :prefix-icon="Search"
         clearable
+        disabled
       />
       <div @click="router.push('/blogs')">博客</div>
       <div @click="router.push('/components')">组件</div>

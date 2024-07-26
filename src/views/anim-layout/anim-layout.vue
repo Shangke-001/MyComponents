@@ -145,7 +145,6 @@ const getData = () => {
       dataInit.columnList[2].push(dataInit.allData[i])
     }
   }
-  console.log(dataInit)
 }
 </script>
 

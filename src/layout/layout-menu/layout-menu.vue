@@ -20,7 +20,6 @@
 
 <script setup lang="ts">
 const { menuRoutes } = defineProps(['menuRoutes'])
-console.log(menuRoutes)
 </script>
 
 <style lang="scss" scoped></style>
