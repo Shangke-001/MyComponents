@@ -17,9 +17,9 @@ export const options = {
       type: 'graph',
       layout: 'force',
       force: {
-        repulsion: 300,
+        repulsion: 500,
         gravity: 0.01,
-        edgeLength: 200
+        edgeLength: [200, 250]
       },
       roam: true,
       draggable: true,

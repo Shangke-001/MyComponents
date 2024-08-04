@@ -18,6 +18,26 @@
       <div id="chart"></div>
       <div class="chart-setting">
         <el-button plain @click="dataSettingVisible = true"> 打开配置面板 </el-button>
+        <el-dialog v-model="dataSettingVisible" title="资金流可视化配置" width="650" align-center>
+          <el-form :model="dataForm" label-width="auto" style="margin: 15px">
+            <el-form-item label="布局方式">
+              <el-select v-model="dataForm.layoutMethod" style="width: 240px">
+                <el-option label="最长链不固定布局" :value="LAYOUT_TYPE.LONGEST_UNFIXED" />
+                <el-option
+                  label="最长链最短通路固定布局"
+                  :value="LAYOUT_TYPE.SHORT_LONGEST_FIXED"
+                />
+              </el-select>
+            </el-form-item>
+          </el-form>
+          <template #footer>
+            <div class="dialog-footer">
+              <el-button @click="dataSettingVisible = false">取消</el-button>
+              <el-button @click="handleReset">重置</el-button>
+              <el-button type="primary" @click="handleConfirm"> 确定 </el-button>
+            </div>
+          </template>
+        </el-dialog>
       </div>
     </main>
   </div>
@@ -36,6 +56,12 @@ import {
 
 //#region Echarts资金流图逻辑
 const dataInit = reactive({
+  nodeList: [],
+  edgeList: [],
+  foldDirection: [],
+  layoutMethod: LAYOUT_TYPE.SHORT_LONGEST_FIXED
+})
+const dataDefault = {
   nodeList: [
     {
       nameToShow: '账户1',
@@ -159,18 +185,24 @@ const dataInit = reactive({
       amount: '边4的描述',
       value: 'JSON'
     }
-  ],
-  foldDirection: [],
-  layoutMethod: LAYOUT_TYPE.SHORT_LONGEST_FIXED
-})
+  ]
+}
 let chart
 onMounted(() => {
+  dataInit.nodeList = dataDefault.nodeList
+  dataInit.edgeList = dataDefault.edgeList
   chart = echarts.init(document.getElementById('chart'))
   initChart()
 })
-watch([dataInit.nodeList, dataInit.edgeList, dataInit.foldDirection], () => {
-  updateChart()
+watch([() => dataInit.nodeList, () => dataInit.edgeList], () => {
+  updateChart(false)
 })
+watch(
+  () => dataInit.layoutMethod,
+  () => {
+    updateChart(true)
+  }
+)
 watch(dataInit.foldDirection, () => {
   const optionNow = chart.getOption()
   optionNow.series[0].links = createEdgeList(dataInit.edgeList, dataInit.foldDirection)
@@ -207,16 +239,35 @@ const initChart = () => {
     }
   })
 }
-const updateChart = () => {
+const updateChart = (ifReset) => {
   const optionNow = chart.getOption()
   optionNow.series[0].data = createNodeList(dataInit.nodeList, dataInit.layoutMethod)
   optionNow.series[0].links = createEdgeList(dataInit.edgeList, dataInit.foldDirection)
-  chart.setOption(optionNow)
+  chart.setOption(optionNow, ifReset)
 }
 //#endregion
 
 //#region 对话框Setting逻辑
 const dataSettingVisible = ref(false)
+const dataForm = reactive({
+  layoutMethod: LAYOUT_TYPE.SHORT_LONGEST_FIXED,
+  nodeJSON: '',
+  listJSON: ''
+})
+const handleReset = () => {
+  dataInit.nodeList = dataDefault.nodeList
+  dataInit.edgeList = dataDefault.edgeList
+  dataInit.foldDirection = []
+  dataInit.layoutMethod = LAYOUT_TYPE.SHORT_LONGEST_FIXED
+  dataForm.layoutMethod = LAYOUT_TYPE.SHORT_LONGEST_FIXED
+  updateChart(true)
+  dataSettingVisible.value = false
+}
+const handleConfirm = () => {
+  //修改dataInit
+  dataInit.layoutMethod = dataForm.layoutMethod
+  dataSettingVisible.value = false
+}
 //#region
 </script>
 
