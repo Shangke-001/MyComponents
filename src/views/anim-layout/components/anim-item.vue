@@ -43,7 +43,6 @@ let ifDot = computed(() => {
     margin: 5px 0 10px 5px;
   }
   .item-data {
-    color: gray;
     padding: 0 15px;
   }
   .item-footer {

@@ -36,6 +36,7 @@ const route = useRoute()
   .main {
     height: calc(100vh - 60px);
     overflow-y: scroll;
+    color: $normal-color;
   }
 }
 </style>

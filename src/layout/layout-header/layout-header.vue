@@ -2,7 +2,7 @@
   <div class="layouth-wrapper">
     <header class="header-content" @click="router.push('/')">
       <img src="/logo.jpg" width="40px" height="45px" />
-      <div>尚可の个人网站</div>
+      <el-button link class="title">尚可の个人网站</el-button>
     </header>
     <main class="header-main">
       <el-input
@@ -13,8 +13,8 @@
         clearable
         disabled
       />
-      <div @click="router.push('/blogs')">博客</div>
-      <div @click="router.push('/components')">组件</div>
+      <el-button link @click="router.push('/blogs')">博客</el-button>
+      <el-button link @click="router.push('/components')">组件</el-button>
       <div>
         <img src="/src/assets/svg/github.svg" width="30" height="30" />
       </div>
@@ -41,7 +41,7 @@ const router = useRouter()
   .header-content {
     display: flex;
     align-items: center;
-    div {
+    .title {
       margin-left: 6px;
       font-weight: 650;
       font-size: 18px;
@@ -50,9 +50,6 @@ const router = useRouter()
   .header-main {
     display: flex;
     align-items: center;
-    div {
-      margin-left: 15px;
-    }
   }
 }
 </style>

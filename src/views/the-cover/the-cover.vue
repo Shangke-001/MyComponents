@@ -2,7 +2,7 @@
   <div class="cover-wrapper">
     <header>
       <div class="cover-title">尚可の个人网站</div>
-      <div style="color: gray">基于 Vue 3 ，存放博客与比较有意思的前端内容</div>
+      <div class="cover-text">基于 Vue 3 ，存放博客与比较有意思的前端内容</div>
     </header>
     <main>
       <img src="/src/assets/svg/cover.svg" width="900px" height="900px" />
@@ -31,6 +31,9 @@
       font-size: 40px;
       font-weight: 700;
       margin-bottom: 30px;
+    }
+    .cover-text {
+      color: $normal-color;
     }
   }
   img {

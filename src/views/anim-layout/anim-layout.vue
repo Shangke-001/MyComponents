@@ -137,9 +137,9 @@ const getData = () => {
   ]
   dataInit.columnList = [[], [], []]
   for (let i = 0; i < dataInit.allData.length; i++) {
-    if ((i + 1) % 3 == 1) {
+    if ((i + 1) % 3 === 1) {
       dataInit.columnList[0].push(dataInit.allData[i])
-    } else if ((i + 1) % 3 == 2) {
+    } else if ((i + 1) % 3 === 2) {
       dataInit.columnList[1].push(dataInit.allData[i])
     } else {
       dataInit.columnList[2].push(dataInit.allData[i])
@@ -151,13 +151,13 @@ const getData = () => {
 <style lang="scss" scoped>
 .anim-wrapper {
   padding: 20px;
-  height: 730px;
+  height: 755px;
   .anim-header {
     margin-bottom: 5px;
     h1 {
       font-size: 25px;
       font-weight: 700;
-      color: gray;
+      margin-bottom: 35px;
     }
     div {
       margin: 10px 0;

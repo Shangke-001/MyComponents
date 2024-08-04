@@ -122,7 +122,7 @@ const handleComponentBtn = (cPath) => {
     h1 {
       font-size: 25px;
       font-weight: 700;
-      color: gray;
+      margin-bottom: 35px;
     }
     div {
       margin: 10px 0;
@@ -132,19 +132,19 @@ const handleComponentBtn = (cPath) => {
     margin: 40px 0 20px 0;
     display: grid;
     font-size: 14px;
-    color: gray;
+    color: $normal-color;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     .card-one {
       position: relative;
       .header-title {
         font-size: 17px;
-        color: gray;
+        color: $normal-color;
         font-weight: 600;
       }
       .main {
         margin: 15px 10px;
-        color: gray;
+        color: $normal-color;
         .main-one {
           margin: 10px 0;
           .title {

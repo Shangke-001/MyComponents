@@ -24,7 +24,7 @@ const handleHoverChange = (index, isHover) => {
 }
 const calculateHeight = () => {
   let hoverIndex = styleList.findIndex((item) => item.isHover)
-  if (hoverIndex == -1) {
+  if (hoverIndex === -1) {
     styleList.forEach((item) => {
       item.height = 190
     })

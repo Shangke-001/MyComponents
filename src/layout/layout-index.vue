@@ -21,7 +21,7 @@ import LayoutHeader from './layout-header/layout-header.vue'
   height: 100vh;
   min-width: 1000px;
   .layout-header {
-    background-color: #fff;
+    background-color: white;
     border-bottom: #eee 2px solid;
   }
 }
