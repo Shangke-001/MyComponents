@@ -16,7 +16,13 @@
       <el-button link @click="router.push('/blogs')">博客</el-button>
       <el-button link @click="router.push('/components')">组件</el-button>
       <div>
-        <img src="/src/assets/svg/github.svg" width="30" height="30" />
+        <img
+          src="/src/assets/svg/github.svg"
+          width="30"
+          height="30"
+          style="margin: 0 15px"
+          @click="handleGithub"
+        />
       </div>
     </main>
   </div>
@@ -30,6 +36,9 @@ const dataInit = reactive({
   searchKeyword: ''
 })
 const router = useRouter()
+const handleGithub = () => {
+  window.open('https://github.com/Shangke-001/MyComponents')
+}
 </script>
 
 <style lang="scss" scoped>

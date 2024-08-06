@@ -19,7 +19,7 @@ export const options = {
       force: {
         repulsion: 500,
         gravity: 0.01,
-        edgeLength: [200, 250]
+        edgeLength: [200, 220]
       },
       roam: true,
       draggable: true,
@@ -209,5 +209,22 @@ export const findMainChain = (nodelist, edgeList, layoutMethod) => {
   }
   nodelist.forEach((item) => {
     item.index = longestChain.indexOf(item.name) + 1
+  })
+}
+//默认折叠边
+export const defaultFoldDirection = (edgeList, foldDirection) => {
+  const directionCount = []
+  edgeList.forEach((item) => {
+    const index = directionCount.findIndex((exist) => {
+      return exist.source === item.source && exist.target === item.target
+    })
+    if (index === -1) {
+      directionCount.push({ source: item.source, target: item.target, count: 1 })
+    } else {
+      directionCount[index].count++
+      if (directionCount[index].count === 4) {
+        foldDirection.push({ source: item.source, target: item.target })
+      }
+    }
   })
 }

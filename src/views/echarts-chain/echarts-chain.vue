@@ -8,17 +8,17 @@
           主要技术点包括Echarts关系图graph配置，主链计算，节点布局，节点拖拽，JSON数据展示，边折叠功能实现等。
         </p>
         <p>
-          通过数据进行Echarts关系图生成，给予主链第一个节点可自动计算后续节点，完成链状布局，其余节点则使用力布局。
-          拖拽节点可以改变节点位置，改变后节点位置固定。鼠标hover到边上进行JSON数据展示，根据层级结构存在缩进。
-          点击边可以对相同流向的边进行折叠，并生成一条“已折叠”的边，点击改变则能进行展开，初始化时，同一流向的边大于等于4条，默认折叠。
+          通过数据进行Echarts关系图生成，自动计算最长链作为主链，完成链状布局，其余节点则使用力布局。
+          拖拽节点可以改变节点位置，改变后节点位置固定。配置界面使用Monaco-Editor进行JSON数据展示与编辑。
+          点击边可以对相同流向的边进行折叠，并生成一条“已折叠”的边，点击改变则能进行展开。初始化时，同一流向的边大于等于4条，默认折叠。
         </p>
       </div>
     </header>
     <main class="main">
-      <div id="chart"></div>
+      <div ref="chartRef" id="chart"></div>
       <div class="chart-setting">
-        <el-button plain @click="dataSettingVisible = true"> 打开配置面板 </el-button>
-        <el-dialog v-model="dataSettingVisible" title="资金流可视化配置" width="650" align-center>
+        <el-button plain @click="handleOpenSetting"> 打开配置面板 </el-button>
+        <el-dialog v-model="dataSettingVisible" title="资金流可视化配置" width="800" align-center>
           <el-form :model="dataForm" label-width="auto" style="margin: 15px">
             <el-form-item label="布局方式">
               <el-select v-model="dataForm.layoutMethod" style="width: 240px">
@@ -28,6 +28,10 @@
                   :value="LAYOUT_TYPE.SHORT_LONGEST_FIXED"
                 />
               </el-select>
+            </el-form-item>
+            <el-form-item>
+              <!-- <div>{{ dataForm.nodeJSON }}</div> -->
+              <div ref="monacoRef" id="monaco-editor"></div>
             </el-form-item>
           </el-form>
           <template #footer>
@@ -44,15 +48,28 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted, watch, ref } from 'vue'
+import { reactive, onMounted, watch, ref, nextTick, toRaw } from 'vue'
 import * as echarts from 'echarts'
+import * as monaco from 'monaco-editor'
 import {
   options,
   createNodeList,
   createEdgeList,
   findMainChain,
+  defaultFoldDirection,
   LAYOUT_TYPE
 } from './echarts-graph'
+import { ElMessage } from 'element-plus'
+
+import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+import JsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
+// @ts-ignore: worker
+self.MonacoEnvironment = {
+  getWorker(_: string, label: string) {
+    if (label === 'json') return new JsonWorker()
+    return new EditorWorker()
+  }
+}
 
 //#region Echarts资金流图逻辑
 const dataInit = reactive({
@@ -178,24 +195,16 @@ const dataDefault = {
       target: '6',
       amount: '边4的描述',
       value: 'JSON'
-    },
-    {
-      source: '3',
-      target: '7',
-      amount: '边4的描述',
-      value: 'JSON'
     }
   ]
 }
 let chart
+const chartRef = ref()
 onMounted(() => {
   dataInit.nodeList = dataDefault.nodeList
   dataInit.edgeList = dataDefault.edgeList
-  chart = echarts.init(document.getElementById('chart'))
+  chart = echarts.init(chartRef.value)
   initChart()
-})
-watch([() => dataInit.nodeList, () => dataInit.edgeList], () => {
-  updateChart(false)
 })
 watch(
   () => dataInit.layoutMethod,
@@ -203,14 +212,9 @@ watch(
     updateChart(true)
   }
 )
-watch(dataInit.foldDirection, () => {
-  const optionNow = chart.getOption()
-  optionNow.series[0].links = createEdgeList(dataInit.edgeList, dataInit.foldDirection)
-  chart.setOption(optionNow)
-})
 const initChart = () => {
   findMainChain(dataInit.nodeList, dataInit.edgeList, dataInit.layoutMethod)
-
+  defaultFoldDirection(dataInit.edgeList, dataInit.foldDirection)
   options.series[0].data = createNodeList(dataInit.nodeList, dataInit.layoutMethod)
   options.series[0].links = createEdgeList(dataInit.edgeList, dataInit.foldDirection)
   chart.setOption(options)
@@ -226,6 +230,9 @@ const initChart = () => {
       } else {
         dataInit.foldDirection.splice(index, 1)
       }
+      const optionNow = chart.getOption()
+      optionNow.series[0].links = createEdgeList(dataInit.edgeList, dataInit.foldDirection)
+      chart.setOption(optionNow)
     }
   })
   chart.off('mouseup')
@@ -240,6 +247,8 @@ const initChart = () => {
   })
 }
 const updateChart = (ifReset) => {
+  findMainChain(dataInit.nodeList, dataInit.edgeList, dataInit.layoutMethod)
+  defaultFoldDirection(dataInit.edgeList, dataInit.foldDirection)
   const optionNow = chart.getOption()
   optionNow.series[0].data = createNodeList(dataInit.nodeList, dataInit.layoutMethod)
   optionNow.series[0].links = createEdgeList(dataInit.edgeList, dataInit.foldDirection)
@@ -251,22 +260,53 @@ const updateChart = (ifReset) => {
 const dataSettingVisible = ref(false)
 const dataForm = reactive({
   layoutMethod: LAYOUT_TYPE.SHORT_LONGEST_FIXED,
-  nodeJSON: '',
-  listJSON: ''
+  monacoEditor: undefined
 })
+
+const monacoRef = ref()
+const initMonacoEditor = () => {
+  // 生成编辑器对象
+  if (dataForm.monacoEditor === undefined) {
+    dataForm.monacoEditor = monaco.editor.create(monacoRef.value, {
+      value: JSON.stringify({ nodeList: dataInit.nodeList, edgeList: dataInit.edgeList }, null, 2),
+      theme: 'vs-dark',
+      roundedSelection: true,
+      readOnly: false,
+      language: 'json'
+    })
+  }
+}
+const handleOpenSetting = () => {
+  dataSettingVisible.value = true
+  nextTick(() => {
+    initMonacoEditor()
+  })
+}
 const handleReset = () => {
   dataInit.nodeList = dataDefault.nodeList
   dataInit.edgeList = dataDefault.edgeList
   dataInit.foldDirection = []
   dataInit.layoutMethod = LAYOUT_TYPE.SHORT_LONGEST_FIXED
   dataForm.layoutMethod = LAYOUT_TYPE.SHORT_LONGEST_FIXED
+  toRaw(dataForm.monacoEditor).setValue(
+    JSON.stringify({ nodeList: dataInit.nodeList, edgeList: dataInit.edgeList }, null, 2)
+  )
   updateChart(true)
   dataSettingVisible.value = false
 }
 const handleConfirm = () => {
   //修改dataInit
   dataInit.layoutMethod = dataForm.layoutMethod
-  dataSettingVisible.value = false
+  try {
+    const dataChange = JSON.parse(toRaw(dataForm.monacoEditor).getValue()) //不写toRaw会卡死
+    dataInit.nodeList = dataChange.nodeList
+    dataInit.edgeList = dataChange.edgeList
+    //console.log(dataChange)
+    updateChart(true)
+    dataSettingVisible.value = false
+  } catch (error) {
+    ElMessage.error('JSON数据解析失败，请检查JSON数据')
+  }
 }
 //#region
 </script>
@@ -302,6 +342,11 @@ const handleConfirm = () => {
       position: absolute;
       top: 15px;
       left: 20px;
+      #monaco-editor {
+        height: 400px;
+        width: 750px;
+        background-color: #eee;
+      }
     }
   }
 }
