@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, reactive, watch } from 'vue'
+import { defineProps, reactive } from 'vue'
 import AnimItem from './anim-item.vue'
 const props = defineProps(['columnData'])
 const styleList = reactive([
@@ -21,6 +21,7 @@ const styleList = reactive([
 ])
 const handleHoverChange = (index, isHover) => {
   styleList[index].isHover = isHover
+  calculateHeight()
 }
 const calculateHeight = () => {
   let hoverIndex = styleList.findIndex((item) => item.isHover)
@@ -41,9 +42,6 @@ const calculateHeight = () => {
     })
   }
 }
-watch(styleList, () => {
-  calculateHeight()
-})
 </script>
 
 <style lang="scss" scoped>

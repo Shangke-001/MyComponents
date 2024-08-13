@@ -24,14 +24,14 @@ import { useRoute } from 'vue-router'
 import Markdown from 'vue3-markdown-it'
 import 'github-markdown-css'
 import md01 from '/src/assets/blogs-contents/前端学习与找实习阶段性总结.md?raw'
-import md02 from '/src/assets/blogs-contents/test.md?raw'
+import md02 from '/src/assets/blogs-contents/测试页面.md?raw'
 const markDownFileList = [
   {
     label: '前端学习与找实习阶段性总结',
     source: md01
   },
   {
-    label: 'test',
+    label: '测试页面',
     source: md02
   }
 ]

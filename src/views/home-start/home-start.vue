@@ -57,7 +57,7 @@ const dataInit = reactive({
         }
       ],
       footer: {
-        blog: 0,
+        blog: -1,
         componentPath: '/components/echartchain'
       }
     },
@@ -74,7 +74,7 @@ const dataInit = reactive({
         }
       ],
       footer: {
-        blog: 1,
+        blog: -1,
         componentPath: '/components/dragsort'
       }
     },
