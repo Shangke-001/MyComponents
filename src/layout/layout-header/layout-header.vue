@@ -2,7 +2,7 @@
   <div class="layouth-wrapper">
     <header class="header-content" @click="router.push('/')">
       <img src="/logo.jpg" width="40px" height="45px" />
-      <el-button link class="title">尚可の个人网站</el-button>
+      <el-button link class="title">尚术坊</el-button>
     </header>
     <main class="header-main">
       <el-input
@@ -13,7 +13,7 @@
         clearable
         disabled
       />
-      <el-button link @click="router.push('/blogs')">博客</el-button>
+      <el-button link @click="router.push('/blogs')">笔记</el-button>
       <el-button link @click="router.push('/components')">组件</el-button>
       <div>
         <img

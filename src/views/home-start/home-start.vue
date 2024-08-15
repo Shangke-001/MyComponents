@@ -1,7 +1,7 @@
 <template>
   <div class="intro-wrapper">
     <header class="intro-header">
-      <h1>尚可の组件简介</h1>
+      <h1>尚术坊の组件简介</h1>
       <div>
         做过的项目中比较有意思的组件或者内容，脱离项目重新编写，进行了简单的实现，不涉及后端接口，用于演示与记录。
       </div>
@@ -28,7 +28,7 @@
             text
             @click="handleBlogBtn(item.footer.blog)"
             :disabled="item.footer.blog === -1"
-            >博客</el-button
+            >笔记</el-button
           >
           <el-button text @click="handleComponentBtn(item.footer.componentPath)">组件</el-button>
         </footer>

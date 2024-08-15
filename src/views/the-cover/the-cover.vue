@@ -1,8 +1,8 @@
 <template>
   <div class="cover-wrapper">
     <header>
-      <div class="cover-title">尚可の个人网站</div>
-      <div class="cover-text">基于 Vue 3 ，存放博客与比较有意思的前端内容</div>
+      <div class="cover-title">尚术坊</div>
+      <div class="cover-text">基于 Vue 3 ，存放笔记与比较有意思的前端内容</div>
     </header>
     <main>
       <img src="/src/assets/svg/cover.svg" width="900px" height="900px" />

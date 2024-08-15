@@ -74,7 +74,7 @@ export const routes: Array<RouteRecordRaw> = [
         //redirect: '/home',
         component: () => import('@/views/my-blogs/my-blogs.vue'),
         meta: {
-          title: '博客',
+          title: '笔记',
           hidden: true
         }
       }
